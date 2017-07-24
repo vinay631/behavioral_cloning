@@ -16,7 +16,8 @@ My project includes the following files:
 * drive.py for driving the car in autonomous mode
 * model.json contains trained convolution neural network
 * model.h5 containing the weights of the netowrk
-* writeup_report.md summarizing the results
+* report.md summarizing the results
+* result.md the video of autonomous driving
 
 #### 2. Training and testing the model
 Using the Udacity provided simulator and my drive.py file, the car can be driven autonomously around the track by executing 
@@ -98,7 +99,7 @@ The code for building and training model can be found in build_model() and train
 
 ####4. Testing the model
 
-I used the first track to test the model. In the beginning, without the recovery data, the car skidded off the track to lake. So the tip to add recovery data proved crucial to the success of the model.
+I used the first track to test the model. In the beginning, without the recovery data, the car skidded off the track to lake. So the tip to add recovery data proved crucial to the success of the model. The result an be found in ["result.mp4"](result.mp4)
 
 ####5. Conclusion and Discussion
 
