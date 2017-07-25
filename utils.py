@@ -18,10 +18,10 @@ def crop_img(img):
 def adj_brightness(img):
   '''Change brightness of image by random amounts.'''
 
-  hsv = cv2.cvtColor(img, cv2.COLOR_RGB2HSV)
+  hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
   factor = 0.4 + np.random.uniform(0, 0.6)
   hsv[:, :, 2] =  hsv[:, :, 2] * factor
-  return cv2.cvtColor(hsv, cv2.COLOR_HSV2RGB)
+  return cv2.cvtColor(hsv, cv2.COLOR_HSV2BGR)
 
 def rand_flip(img, steering_angle):
   '''Flip the image and steering by a probability of 50%.'''

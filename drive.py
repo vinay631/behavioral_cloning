@@ -2,7 +2,8 @@ import argparse
 import base64
 import json
 import cv2
-
+import os
+import shutil
 import numpy as np
 import socketio
 import eventlet
@@ -12,6 +13,7 @@ from PIL import Image
 from PIL import ImageOps
 from flask import Flask, render_template
 from io import BytesIO
+from datetime import datetime
 
 from keras.models import model_from_json
 from keras.preprocessing.image import ImageDataGenerator, array_to_img, img_to_array
@@ -34,11 +36,19 @@ def preprocess_image(img):
     BGR to YUV and drive.py uses RGB to YUV (due to using cv2 to read the image here, where drive.py images are 
     received in RGB)
     '''
-    # Crop Image
+    # original shape: 160x320x3, input shape for neural net: 66x200x3
+    # crop to 105x320x3
+    #new_img = img[35:140,:,:]
+    # crop to 40x320x3
     new_img = img[50:-20,:,:]
-    # Scale to 66x200x3
+    # apply subtle blur
+    #new_img = cv2.GaussianBlur(new_img, (3,3), 0)
+    # scale to 66x200x3 (same as nVidia)
     new_img = cv2.resize(new_img,(200, 66), interpolation = cv2.INTER_AREA)
+    # scale to ?x?x3
+    #new_img = cv2.resize(new_img,(80, 10), interpolation = cv2.INTER_AREA)
     # convert to YUV color space (as nVidia paper suggests)
+    ####### REMEMBER: IMAGES FROM SIMULATOR COME IN RGB!!!!!! #######
     new_img = cv2.cvtColor(new_img, cv2.COLOR_RGB2YUV)
     return new_img
 
@@ -53,6 +63,7 @@ def telemetry(sid, data):
     # The current image from the center camera of the car
     imgString = data["image"]
     image = Image.open(BytesIO(base64.b64decode(imgString)))
+    img_copy = image.copy()
     image_array = np.asarray(image)
     img = preprocess_image(image_array)
     transformed_image_array = img[None, :, :, :]
@@ -67,7 +78,7 @@ def telemetry(sid, data):
     if args.image_folder != '':
         timestamp = datetime.utcnow().strftime('%Y_%m_%d_%H_%M_%S_%f')[:-3]
         image_filename = os.path.join(args.image_folder, timestamp)
-        image.save('{}.jpg'.format(image_filename)) 
+        img_copy.save('{}.jpg'.format(image_filename)) 
 
 @sio.on('connect')
 def connect(sid, environ):
@@ -86,9 +97,16 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Remote Driving')
     parser.add_argument('model', type=str,
             help='Path to model definition json. Model weights should be on the same path.')
-    parser.add_argument('-o', '--image_folder', type=str, help='video img dir')
+    parser.add_argument('-o','--image_folder', type=str, help='video img dir')
     args = parser.parse_args()
     with open(args.model, 'r') as jfile:
+        # NOTE: if you saved the file by calling json.dump(model.to_json(), ...)
+        # then you will have to call:
+        #
+        #   model = model_from_json(json.loads(jfile.read()))\
+        #
+        # instead.
+        #print(jfile.read())
         model = model_from_json(jfile.read())
 
 

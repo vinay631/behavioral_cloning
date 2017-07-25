@@ -22,7 +22,7 @@ My project includes the following files:
 #### 2. Training and testing the model
 Using the Udacity provided simulator and my drive.py file, the car can be driven autonomously around the track by executing 
 ```sh
-python drive.py model.json
+python drive.py model.json -o result
 ```
 
 The model can be trained by using the following:
