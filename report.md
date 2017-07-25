@@ -61,7 +61,7 @@ Here is the final architecture which was coded using Keras:
 
 
 
-####2. Data Collection and preprocessing
+#### 2. Data Collection and preprocessing
 
 The data was collected by driving multiple laps in the first track (the "lake track"). Visualizing the steering angles, we can see that the  dataset is highly imbalanced, which means that the predicted angle will most of the time be zero.
 
@@ -89,7 +89,7 @@ The data augmentation and preprocessing methods are in utils.py in methods "augm
 
 I also added some recovery data by driving to the edge of the track and recording the process of bringing the car back to the center. This really helped me avoid the cases where the model did not know what it was supposed to be do when the car approached the edges of the track.
 
-####3. Training the model
+#### 3. Training the model
 
 The data was split into training and validation dataset using generator method called 'generate_data'. For each epoch, 80% of the data was training data and the 20% data was for validation.
 
@@ -97,10 +97,10 @@ Mean squared error was used for loss function to measure the accuracy of predict
 
 The code for building and training model can be found in build_model() and train() methods respectively.
 
-####4. Testing the model
+#### 4. Testing the model
 
 I used the first track to test the model. In the beginning, without the recovery data, the car skidded off the track to lake. So the tip to add recovery data proved crucial to the success of the model. The result an be found in ["result.mp4"](result.mp4)
 
-####5. Conclusion and Discussion
+#### 5. Conclusion and Discussion
 
 This project really helped me grasp the idea of having a balanced dataset for successful model. More than anything else (parameter tuning), only the change in the makeup of the dataset really determined the accuracy of the model. There is a plenty of room for improvement here like using more dataset from the other track and successfully using the model to navigate the second track, trying out different models etc. I will definitely be revisiting these improvements soon. I would also like to "visualize" what the model bases its decision on. Overall though, implementing this project has been very a great learning experience.
